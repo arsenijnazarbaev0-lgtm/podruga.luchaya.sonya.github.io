@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ты — лучшая подруга</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #ffe3ec 0%, #ffd6e8 25%, #f3e0ff 50%, #e0e7ff 75%, #dff5ff 100%);
+    background-size: 300% 300%;
+    animation: bgShift 18s ease infinite;
+    overflow-x: hidden;
+    color: #4a3b4f;
+  }
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .floaty {
+    position: fixed;
+    top: 100%;
+    font-size: 22px;
+    opacity: 0.6;
+    animation: floatUpBg linear infinite;
+    pointer-events: none;
+    user-select: none;
+  }
+  @keyframes floatUpBg {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+
+  .wrap {
+    position: relative;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: #7a4a63;
+    opacity: 0;
+    transform: translateY(-14px);
+    animation: fadeDown 0.9s ease forwards;
+  }
+  .subtitle {
+    font-size: 16px;
+    color: #8a6d80;
+    opacity: 0;
+    animation: fadeDown 0.9s ease 0.35s forwards;
+  }
+  @keyframes fadeDown { to { opacity: 1; transform: translateY(0); } }
+
+  .card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 15.5px;
+    text-align: left;
+    box-shadow: 0 4px 16px rgba(180, 120, 160, 0.12);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hint {
+    font-size: 14px;
+    color: #8a6d80;
+    margin: 32px 0 14px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .mini-btn {
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 16px;
+    padding: 16px 10px;
+    font-size: 13.5px;
+    color: #7a4a63;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(180,120,160,0.12);
+    transition: transform 0.15s ease;
+  }
+  .mini-btn:hover { transform: translateY(-3px); }
+  .mini-btn:active { animation: pop 0.35s ease; }
+  .reveal {
+    font-size: 13px;
+    color: #a05c86;
+    margin-top: 6px;
+    min-height: 18px;
+    font-style: italic;
+  }
+
+  .big-btn {
+    background: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 34px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #b0466e;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(200,100,150,0.2);
+    margin-top: 8px;
+  }
+  .big-btn:hover { transform: translateY(-2px); }
+
+  #heartMsg, #hugMsg {
+    min-height: 26px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #a0396a;
+    margin-top: 14px;
+    opacity: 0;
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+  @keyframes hugPulse { 0% { transform: scale(0.9); opacity: 0; } 60% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes floatHeart { 0% { opacity: 0; transform: translateY(0) scale(0.7); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-70px) scale(1.2); } }
+
+  .heart-icon { font-size: 22px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Это сайт для самой лучшей подруги на свете 💕</h1>
+  <p class="subtitle">Просто хочу, чтобы ты сегодня почувствовала, как я тебя ценю</p>
+
+  <div id="lines"></div>
+
+  <p class="hint">Нажимай на кнопки — там ещё немного правды о тебе ✨</p>
+  <div class="grid" id="buttons"></div>
+
+  <div style="margin-top: 36px; position: relative;" id="heartArea">
+    <button class="big-btn" id="heartBtn"><span class="heart-icon" id="heartIcon">❤️</span> Нажми на сердце</button>
+    <p id="heartMsg"></p>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <button class="big-btn" id="hugBtn" style="color:#5c6bc0;">🤗 Нажми
+    </button>
+    <p id="hugMsg"></p>
+  </div>
+</div>
+
+<script>
+  const emojis = ['💕','✨','🌸','💫','🤍'];
+  for (let i = 0; i < 18; i++) {
+    const e = document.createElement('div');
+    e.className = 'floaty';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = Math.random()*100 + 'vw';
+    e.style.animationDuration = (10 + Math.random()*10) + 's';
+    e.style.animationDelay = (Math.random()*10) + 's';
+    document.body.appendChild(e);
+  }
+
+  const lines = [
+    "Ты замечаешь, когда мне бывает плохо и всгда оказываешься рядом",
+    "Ты умеешь радовать меня даже в самые ужасные дни",
+    "С тобой можно молчать, и это тоже разговор",
+    "Ты честная и безумно добрая всегда ко мне",
+    "Ты сильнее, чем сама думаешь, я в этом польностью уверен",
+    "Ты настолько хороша и добра ко мне что у меня слов не хватает",
+    "Ты делаешь мир вокруг себя теплее, даже не замечая этого",
+    "Ты всегда находишь слова, когда мне плохо",
+    "Ты идеальная во всех смыслах которые могут быть",
+    "Ты — человек, с которым я всегда готов быть рядом"
+  ];
+  const linesEl = document.getElementById('lines');
+  lines.forEach((t, i) => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.textContent = t;
+    d.style.animation = `fadeUp 0.6s ease ${0.6 + i*0.18}s forwards`;
+    linesEl.appendChild(d);
+  });
+
+  const buttonData = [
+    { label: 'Какая ты?', text: 'Ты редкая. Такие люди, как ты, встречаются нечасто.' },
+    { label: 'Что я чувствую рядом с тобой?', text: 'Спокойствие. Рядом с тобой всегда легче дышать.' },
+    { label: 'Заслуживаешь ли ты лучшего?', text: 'Да. Всегда да. Без вопросов.' },
+    { label: 'Изменится ли моё отношение к тебе?', text: 'Никогда. Я с тобой, что бы ни случилось.' },
+    { label: 'Секретная кнопка 🎁', text: 'Я очень тебя люблю и горжусь тем, что ты моя подруга.' }
+  ];
+  const btnWrap = document.getElementById('buttons');
+  buttonData.forEach(b => {
+    const box = document.createElement('div');
+    const btn = document.createElement('button');
+    btn.className = 'mini-btn';
+    btn.textContent = b.label;
+    const reveal = document.createElement('div');
+    reveal.className = 'reveal';
+    btn.onclick = () => {
+      btn.style.animation = 'wiggle 0.4s ease';
+      setTimeout(() => btn.style.animation = '', 400);
+      reveal.textContent = b.text;
+      reveal.style.animation = 'fadeUp 0.5s ease forwards';
+    };
+    box.appendChild(btn);
+    box.appendChild(reveal);
+    btnWrap.appendChild(box);
+  });
+
+  document.getElementById('heartBtn').onclick = () => {
+    const icon = document.getElementById('heartIcon');
+    icon.style.animation = 'pop 0.5s ease';
+    setTimeout(() => icon.style.animation = '', 500);
+    const msg = document.getElementById('heartMsg');
+    msg.textContent = 'Ты — самая лучшая подруга. Точка.';
+    msg.style.transition = 'opacity 0.6s ease';
+    msg.style.opacity = '1';
+
+    const area = document.getElementById('heartArea');
+    for (let i = 0; i < 6; i++) {
+      const h = document.createElement('span');
+      h.textContent = '❤️';
+      h.style.position = 'absolute';
+      h.style.left = (45 + Math.random()*10 - 5) + '%';
+      h.style.top = '0';
+      h.style.fontSize = '18px';
+      h.style.animation = `floatHeart ${1 + Math.random()*0.6}s ease ${i*0.1}s forwards`;
+      area.appendChild(h);
+      setTimeout(() => h.remove(), 2000);
+    }
+  };
+
+  document.getElementById('hugBtn').onclick = () => {
+    const msg = document.getElementById('hugMsg');
+    msg.textContent = 'Обнимаю тебя крепко-крепко. Ты не одна. 🤍';
+    msg.style.animation = 'hugPulse 0.7s ease forwards';
+  };
+</script>
+
+</body>
+</html>
